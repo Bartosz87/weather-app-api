@@ -11,10 +11,17 @@
 
 
 <form action="/submit" method="post">
-  <label for="birthday">Enter date to get output from weather station:</label><br>
-  <input type="date" id="weather-date" name="weather-date"><br><br>
-  <input type="submit" value="Send">
+    <label for="weather-date">Enter date to get output from weather station:</label><br>
+    <input type="date" id="weather-date" name="weather-date"><br><br>
+    <label for="station">Choose your weather station::</label>
+    <select name="station" id="station">
+        {% for station in stations_list %}
+        <option value="{{ station }}">{{ station }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Send">
 </form>
+
 
 
 </body>
