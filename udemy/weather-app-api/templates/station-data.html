@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<meta charset="UTF-8">
+<h1>
+    Weather data from {{ station }} starting from {{ start_date }}
+</h1>
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+</body>
+<head>
+</head>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{date_set | safe}},
+      datasets: [{
+        label: 'Temperature C',
+        data: {{temp_set | safe}},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>

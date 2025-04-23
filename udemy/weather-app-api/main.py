@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 
 app = Flask(__name__)
@@ -15,7 +15,7 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    date = request.form['weather-date']
+    start_date = request.form['weather-date']
     station = request.form['station']
 
     #na podstawie nazwy miasta znajduję jego id
@@ -31,19 +31,24 @@ def submit():
     df["TG0"] = df["TG0"] / 10
     df.columns = df.columns.str.strip()
 
+    start_date = pd.to_datetime(start_date)
+
+
     #sprawdzam czy data mieści się w zakresie pomiarowym i podaję odczyt
-    if date in df["DATE"].values:
-        temp_readout = str(df[df["DATE"] == date]["TG0"].iloc[0])
+    if start_date in df["DATE"].values:
+        filtered_df = df[(df['DATE'] >= start_date)][:60]
     else:
-        temperature ="No read out"
+        return render_template("home.html", stations_list=stations_list, comment="Date out of scope. Chose different one.")
 
-    return{
-        "station":station,
-        "date": date,
-        "remperature": temperature
-    }
+    filtered_df['DATE'] = filtered_df['DATE'].astype(str)
 
+    date_set = filtered_df['DATE'].tolist()
+    temp_set = filtered_df["TG0"].tolist()
+
+    return render_template("station-data.html",  date_set=date_set, temp_set=temp_set,
+        station=station, start_date=start_date )
 
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
+
