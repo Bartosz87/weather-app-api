@@ -15,7 +15,7 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    start_date = request.form['weather-date']
+    start_date_form = request.form['weather-date']
     station = request.form['station']
 
     #na podstawie nazwy miasta znajduję jego id
@@ -31,7 +31,7 @@ def submit():
     df["TG0"] = df["TG0"] / 10
     df.columns = df.columns.str.strip()
 
-    start_date = pd.to_datetime(start_date)
+    start_date = pd.to_datetime(start_date_form)
 
 
     #sprawdzam czy data mieści się w zakresie pomiarowym i podaję odczyt
@@ -46,7 +46,7 @@ def submit():
     temp_set = filtered_df["TG0"].tolist()
 
     return render_template("station-data.html",  date_set=date_set, temp_set=temp_set,
-        station=station, start_date=start_date )
+        station_default=station, start_date=start_date, start_date_form=start_date_form, stations_list= stations_list )
 
 
 if __name__ == "__main__":

@@ -4,8 +4,24 @@
 
 <meta charset="UTF-8">
 <h1>
-    Weather data from {{ station }} starting from {{ start_date }}
+    Weather data from {{ station_default }} starting from {{ start_date }}
 </h1>
+
+<form action="/submit" method="post">
+    <label for="weather-date">Change starting date:</label>
+    <input type="date" id="weather-date" name="weather-date" value="{{start_date_form}}" selected><br><br>
+    <label for="station">Choose your weather station::</label>
+    <select name="station" id="station">
+        <option value="{{ station_default }}" selected >{{ station_default }} </option>
+        {% for station in stations_list %}
+        <option value="{{ station }}" >{{ station }} </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Send">
+</form>
+
+<h2>    {{comment}}</h2>
+
 
 <div>
   <canvas id="myChart"></canvas>
